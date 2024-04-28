@@ -43,7 +43,7 @@ def draw_graph():
         source_code = HtmlFile.read()
         st.components.v1.html(source_code, height=800)
     else:
-        st.error("Please ensure all necessary data is loaded.")
+        st.error("Revisaaaa")
 
 
 def main():
