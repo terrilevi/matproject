@@ -11,13 +11,21 @@ st.set_page_config(
         )
 ##################################
 
+# Base de datos de alumno
+file_path = os.path.join(os.path.dirname(__file__), 'bd_alumnos.csv')
+df_alumnos = pd.read_csv(file_path)
+########################
+
 
 def main():
     if autenticacion_usuario():
         st.title("Datos del estudiante")
-        ###Solo son ejemplos, luego haré que lea de frente de la base de datos: bd_alumnos
-        st.subheader("Alumno: Alexander")
-        st.caption("Ciclo: 5to")
+        if "nombre" in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state :
+        # Display a greeting with the user's name
+            st.write(f"Hola, {st.session_state['nombre']}!")
+            st.write(f"Ciclo: {st.session_state['ciclo_actual']}")
+            st.write(f"Cursos: {st.session_state['cursos_aprobados']}")
+
 
 
 
