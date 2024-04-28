@@ -1,13 +1,11 @@
 import streamlit as st
 import pandas as pd
 from pyvis.network import Network
-import networkx as nx
-from login import autenticacion_usuario
 
 def draw_graph():
     df = st.session_state['df']
     ciclo_actual = int(st.session_state['ciclo_actual'])
-    cursos_aprobados = set(st.session_state.get('cursos_aprobados', []))  # Ensure this is initialized
+    cursos_aprobados = set(st.session_state.get('cursos_aprobados', []))
 
     df['Ciclo'] = pd.to_numeric(df['Ciclo'], errors='coerce')
     df['Código'] = df['Código'].astype(str).str.strip()
@@ -15,36 +13,23 @@ def draw_graph():
 
     df_filtrado = df[df['Ciclo'] <= ciclo_actual + 3]
 
-    G = nx.DiGraph()
+    net = Network(height="750px", width="100%", bgcolor="#222222", font_color="white")
 
-    # New dictionaries to store node colors explicitly
-    node_colors = {}
-
+    # Create nodes and edges directly in PyVis with color logic
     for index, row in df_filtrado.iterrows():
-        node_color = 'green' if row['Código'] in cursos_aprobados else 'gray'
-        node_colors[row['Código']] = node_color  # Store or update color
-
-        G.add_node(row['Código'], title=row['Código'], color=node_color)
+        code_color = 'green' if row['Código'] in cursos_aprobados else 'gray'
+        net.add_node(row['Código'], title=row['Código'], color=code_color)
 
         if row['Requisito'] != 'Ninguno':
             req_color = 'green' if row['Requisito'] in cursos_aprobados else 'gray'
-            node_colors[row['Requisito']] = req_color  # Store or update color
+            net.add_node(row['Requisito'], title=row['Requisito'], color=req_color)
+            net.add_edge(row['Requisito'], row['Código'])
 
-            G.add_node(row['Requisito'], title=row['Requisito'], color=req_color)
-            G.add_edge(row['Requisito'], row['Código'])
-
-            # Update color for complex condition
+            # Update color based on complex condition
             if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
-                node_colors[row['Código']] = 'blue'
+                net.get_node(row['Código']).update(color='blue')
 
-    # Create PyVis network and apply colors explicitly from dictionary
-    net = Network(height="750px", width="100%", bgcolor="#222222", font_color="white")
-    for node in G.nodes:
-        net.add_node(node, title=node, color=node_colors[node])
-    for edge in G.edges:
-        net.add_edge(edge[0], edge[1])
-
-    net.save_graph("graph.html")
+    net.show("graph.html")
     HtmlFile = open("graph.html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     st.components.v1.html(source_code, height=800)
