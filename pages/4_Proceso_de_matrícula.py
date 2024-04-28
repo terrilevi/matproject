@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from pyvis.network import Network
+import networkx as nx
+from login import autenticacion_usuario
 
 def draw_graph():
     df = st.session_state['df']
