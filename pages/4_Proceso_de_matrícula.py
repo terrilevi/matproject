@@ -5,7 +5,7 @@ import pandas as pd
 import networkx as nx
 from login import autenticacion_usuario
 
-def draw_graph():
+def draw_graph(df, cursos_aprobados):
     if 'df' in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state:
         df = st.session_state['df']
         ciclo_actual = int(st.session_state['ciclo_actual'])
@@ -63,7 +63,7 @@ def main():
             if "nombre" in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state:
                 st.write(f"Cursos: {st.session_state['cursos_aprobados']}")
                 df = st.session_state['df']
-                draw_graph()  # Now we draw the graph after the checks
+                draw_graph(df, cursos_aprobados)  # Now we draw the graph after the checks
     else:
         st.error("Debes iniciar sesión para ver el contenido.")
 
