@@ -29,9 +29,9 @@ def draw_graph():
 
             # Update color based on complex condition
             if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
-                net.get_node(row['Código']).update(color='blue')
+                net.get_node(row['Código']).update_color('blue')
 
-    net.show("graph.html")
+    net.save_graph("graph.html")
     HtmlFile = open("graph.html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     st.components.v1.html(source_code, height=800)
@@ -51,4 +51,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 
