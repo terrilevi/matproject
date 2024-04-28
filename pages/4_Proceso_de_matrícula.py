@@ -29,10 +29,15 @@ def draw_graph(df, user_info):
         net.add_node(node, title=node, color=node_attrs['color'])
     for edge in G.edges():
         net.add_edge(edge[0], edge[1])
-    
-    net.show("graph.html")
-    st.write("Courses Displayed in the Graph")
-    st.write(df[['Ciclo', 'Código', 'Nombre']].drop_duplicates().sort_values(by='Ciclo'))
+
+    # Save the graph to an HTML file
+    net.save_graph("graph.html")
+
+    # Read the HTML file content and display it using Streamlit
+    HtmlFile = open("graph.html", 'r', encoding='utf-8')
+    source_code = HtmlFile.read()  # Read the HTML file
+    st.components.v1.html(source_code, height=800)  # Render HTML in Streamlit
+
 
 def main():
     if autenticacion_usuario():
