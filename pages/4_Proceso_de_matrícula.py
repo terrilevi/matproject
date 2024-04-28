@@ -28,12 +28,23 @@ def draw_graph():
                 if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
                     G.nodes[row['Código']]['color'] = 'blue'
 
+        # Get nodes displayed in the graph
+        nodos_mostrados = G.nodes()
+        df_mostrados = df[df['Código'].isin(nodos_mostrados)].copy()
+        # This needs to be updated to the correct column names if they differ from the original
+        df_mostrados = df_mostrados[['Ciclo', 'Código', 'Nombre']].drop_duplicates().sort_values(by='Ciclo')
+        
+        st.write("Courses Displayed in the Graph")
+        st.dataframe(df_mostrados)
+
         net = Network(height="750px", width="100%", bgcolor="#222222", font_color="white")
+        # Add nodes and edges to the network graph
         for node, node_attrs in G.nodes(data=True):
             net.add_node(node, title=node, color=node_attrs['color'])
         for edge in G.edges():
             net.add_edge(edge[0], edge[1])
 
+        # Save and display the graph
         net.save_graph("graph.html")
         HtmlFile = open("graph.html", 'r', encoding='utf-8')
         source_code = HtmlFile.read()
