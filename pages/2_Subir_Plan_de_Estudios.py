@@ -32,6 +32,8 @@ def main():
     if autenticacion_usuario():
         st.title("Plan de estudios")
         upload_file = st.file_uploader('Subir el plan de estudios correspondiente a tu carrera')
+        st.write("IMPORTANTE: Considere que el archivo debe contener las siguientes columnas.")
+        st.write('Ciclo, Código, Nombre, Requisito, Nombre Requisito, Tipo ,Sede, Modalidad, Créditos')
         if upload_file is not None:
             filename = upload_file.name  # Obtener el nombre del archivo
             st.write(f"Archivo cargado: {filename}")  # Mostrar el nombre del archivo
