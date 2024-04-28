@@ -10,3 +10,9 @@ openpyxl
 geopandas
 shapely
 networkx
+pandas
+networkx
+matplotlib
+streamlit
+openpyxl
+pyvis
