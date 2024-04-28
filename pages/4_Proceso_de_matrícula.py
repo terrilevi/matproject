@@ -8,7 +8,7 @@ from login import autenticacion_usuario
 def draw_graph(df):
     """Draws the graph with the approved courses and courses the user can take, showing direct prerequisite connections."""
     ciclo_actual = int(st.session_state['ciclo_actual'])
-    cursos_aprobados = set(st.session_state['cursos_aprobados'])
+    cursos_aprobados = st.session_state['cursos_aprobados']
 
     df['Ciclo'] = pd.to_numeric(df['Ciclo'], errors='coerce')
     df['Código'] = df['Código'].astype(str).str.strip()
