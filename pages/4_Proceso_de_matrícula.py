@@ -19,14 +19,17 @@ def draw_graph():
 
         G = nx.DiGraph()
         for index, row in df_filtrado.iterrows():
-            if row['Código'] not in G.nodes():
-                G.add_node(row['Código'], title=row['Código'], color='green' if row['Código'] in cursos_aprobados else 'gray')
-            if row['Requisito'] != 'Ninguno':
-                if row['Requisito'] not in G.nodes():
-                    G.add_node(row['Requisito'], title=row['Requisito'], color='green' if row['Requisito'] in cursos_aprobados else 'gray')
-                G.add_edge(row['Requisito'], row['Código'])
-                if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
-                    G.nodes[row['Código']]['color'] = 'blue'
+            if "nombre" in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state:
+                ciclo_actual = int(st.session_state['ciclo_actual'])
+                cursos_aprobados = set(st.session_state['cursos_aprobados'])
+                if row['Código'] not in G.nodes():
+                    G.add_node(row['Código'], title=row['Código'], color='green' if row['Código'] in cursos_aprobados else 'gray')
+                if row['Requisito'] != 'Ninguno':
+                    if row['Requisito'] not in G.nodes():
+                        G.add_node(row['Requisito'], title=row['Requisito'], color='green' if row['Requisito'] in cursos_aprobados else 'gray')
+                    G.add_edge(row['Requisito'], row['Código'])
+                    if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
+                        G.nodes[row['Código']]['color'] = 'blue'
 
         nodos_mostrados = G.nodes()
         df_mostrados = df[df['Código'].isin(nodos_mostrados)].copy()
