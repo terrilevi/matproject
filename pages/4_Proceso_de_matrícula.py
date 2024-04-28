@@ -19,9 +19,6 @@ def draw_graph():
 
         G = nx.DiGraph()
         for index, row in df_filtrado.iterrows():
-            if "nombre" in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state:
-                ciclo_actual = int(st.session_state['ciclo_actual'])
-                cursos_aprobados = set(st.session_state['cursos_aprobados'])
                 if row['Código'] not in G.nodes():
                     G.add_node(row['Código'], title=row['Código'], color='green' if row['Código'] in cursos_aprobados else 'gray')
                 if row['Requisito'] != 'Ninguno':
