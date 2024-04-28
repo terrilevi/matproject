@@ -20,17 +20,20 @@ def draw_graph(df):
         # Filter courses within 3 cycles ahead of the current one
         if row['Ciclo'] <= ciclo_actual + 3:
             # Add node for the current course if not already present
-            color = 'green' if row['Código'] in cursos_aprobados else 'gray'
+            if row['Código'] in cursos_aprobados:
+                color = 'green'
+            elif row['Requisito'] in cursos_aprobados and row['Requisito'] != 'Ninguno':
+                color = 'blue'  # Available to take
+            else:
+                color = 'gray'  # Not available
+
             G.add_node(row['Código'], title=row['Código'], color=color)
 
             # Add edges for prerequisite if it's not 'Ninguno'
             if row['Requisito'] != 'Ninguno':
-                color = 'green' if row['Requisito'] in cursos_aprobados else 'gray'
-                G.add_node(row['Requisito'], title=row['Requisito'], color=color)
+                prereq_color = 'green' if row['Requisito'] in cursos_aprobados else 'gray'
+                G.add_node(row['Requisito'], title=row['Requisito'], color=prereq_color)
                 G.add_edge(row['Requisito'], row['Código'])
-                # Update color for the current course if it can be taken next
-                if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
-                    G.nodes[row['Código']]['color'] = 'blue'
 
     net = Network(height="750px", width="100%", bgcolor="#222222", font_color="white")
     # Add nodes and edges to the network graph
@@ -44,6 +47,7 @@ def draw_graph(df):
     HtmlFile = open("graph.html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     st.components.v1.html(source_code, height=800)
+
 
 def main():
     if autenticacion_usuario():
