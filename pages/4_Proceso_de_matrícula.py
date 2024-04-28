@@ -63,7 +63,6 @@ def main():
             if "nombre" in st.session_state and "ciclo_actual" in st.session_state and "cursos_aprobados" in st.session_state:
                 st.write(f"Cursos: {st.session_state['cursos_aprobados']}")
                 df = st.session_state['df']
-                st.write(df)
                 draw_graph()  # Now we draw the graph after the checks
     else:
         st.error("Debes iniciar sesión para ver el contenido.")
