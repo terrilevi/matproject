@@ -19,18 +19,14 @@ def draw_graph():
 
         G = nx.DiGraph()
         for index, row in df_filtrado.iterrows():
-            node_color = 'green' if row['Código'] in cursos_aprobados else 'gray'
-            G.add_node(row['Código'], title=row['Código'], color=node_color)
+            if row['Código'] not in G.nodes():
+                G.add_node(row['Código'], title=row['Código'], color='green' if row['Código'] in cursos_aprobados else 'gray')
             if row['Requisito'] != 'Ninguno':
-                requisito_color = 'green' if row['Requisito'] in cursos_aprobados else 'gray'
-                G.add_node(row['Requisito'], title=row['Requisito'], color=requisito_color)
+                if row['Requisito'] not in G.nodes():
+                    G.add_node(row['Requisito'], title=row['Requisito'], color='green' if row['Requisito'] in cursos_aprobados else 'gray')
                 G.add_edge(row['Requisito'], row['Código'])
-
                 if row['Requisito'] in cursos_aprobados and row['Código'] not in cursos_aprobados:
                     G.nodes[row['Código']]['color'] = 'blue'
-                    for dependencia in G.successors(row['Código']):
-                        if G.nodes[dependencia]['color'] not in ['green', 'blue']:
-                            G.nodes[dependencia]['color'] = 'red'
 
         nodos_mostrados = G.nodes()
         df_mostrados = df[df['Código'].isin(nodos_mostrados)].copy()
