@@ -9,6 +9,19 @@ st.set_page_config(
     page_icon="school",
     initial_sidebar_state="expanded",
 )
+
+#page_bg_img = """
+#    <style>
+#    [data-testid="stAppViewContainer"] > .main {
+#        background-image: url("https://img.freepik.com/foto-gratis/fondo-acuarela-pintada-mano-forma-cielo-nubes_24972-1095.jpg");
+#        background-size: cover;
+#        background-position: center;
+#        background-attachment: fixed;
+#    }
+#    </style>
+#"""
+#st.markdown(page_bg_img, unsafe_allow_html=True)
+
 # Función que permite arreglar los nombres de los cursos
 def arreglarNombres(df, columna):
     nombresCorregidos = []
