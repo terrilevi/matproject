@@ -19,21 +19,23 @@ def draw_graph():
 
         G = nx.DiGraph()
         for index, row in df_filtrado.iterrows():
-            color = 'gray' 
-            if row['Código'] in cursos_aprobados:
-                color = 'green'
-            elif row['Requisito'] in cursos_aprobados or row['Requisito'] == 'Ninguno':
-                color = 'blue'
-            G.add_node(row['Código'], title=row['Nombre'], color=color)
+            G.add_node(row['Código'], title=row['Nombre'], color='gray')
             if row['Requisito'] != 'Ninguno':
-                if row['Requisito'] not in G.nodes:
-                    G.add_node(row['Requisito'], title=row['Requisito'], color='green' if row['Requisito'] in cursos_aprobados else 'gray')
+                G.add_node(row['Requisito'], title=row['Requisito'], color='gray')
                 G.add_edge(row['Requisito'], row['Código'])
-        for node in G.nodes:
+        for node in G:
+            if node in cursos_aprobados:
+                G.nodes[node]['color'] = 'green'  
+            elif G.in_degree(node) == 0 or all(pred in cursos_aprobados for pred in G.predecessors(node)):
+                G.nodes[node]['color'] = 'blue'  
+        def mark_red(node):
+            for successor in G.successors(node):
+                if G.nodes[successor]['color'] not in ['green', 'blue']:
+                    G.nodes[successor]['color'] = 'red'
+                    mark_red(successor)  
+        for node in G:
             if G.nodes[node]['color'] == 'blue':
-                for successor in G.successors(node):
-                    if G.nodes[successor]['color'] == 'gray':
-                        G.nodes[successor]['color'] = 'red'
+                mark_red(node)
 
         nodos_mostrados = G.nodes()
         df_mostrados = df[df['Código'].isin(nodos_mostrados)].copy()
